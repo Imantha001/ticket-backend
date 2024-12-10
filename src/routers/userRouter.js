@@ -4,6 +4,7 @@ const { route, post } = require("./ticketRouter");
 
 const { insertUser, getUserByEmail } = require("../model/users/user.model");
 const { hashPassword,comparePassword } = require("../helpers/bcrypt.helper");
+const { crateAccessJWT, crateRefreshJWT } = require("../helpers/jwt.helper");
 
 const { json } = require("body-parser");
 
@@ -20,7 +21,6 @@ router.all("/", (req, res, next) => {
 router.post("/", async (req, res) => {
   const { name, company, address, phone, email, password } = req.body;
   try {
-
     const hashedPass = await hashPassword(password);
     const newUserObj = {
       name,
@@ -53,15 +53,25 @@ router.post("/login", async (req, res) => {
     return res.json({ status: "error", message: "Submition is not valid " });
   }
   const user = await getUserByEmail(email);
+
+
+
   const passFromDb = user && user._id ? user.password : null;
-
-
 
   if (!passFromDb)
     return res.json({ status: "error", message: "Invalid Email or Password!" });
+
   const result = await comparePassword(password, passFromDb);
-  console.log(result);
-  res.json({ status: "success", message: "Login Successfully..!" });
+  if (!result) {
+    return res.json({ status: "error", message: "Invalid email or password!" });
+  }
+
+  
+  const accessJWT = await crateAccessJWT(user.email);
+  const refreshJWT = await crateRefreshJWT(user.email);
+  res.json({
+    status: "success",message: "Login Successfully!", accessJWT, refreshJWT,
+  });
 
 
 });
