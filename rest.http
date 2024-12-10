@@ -1,0 +1,19 @@
+# Sing up Endpoint
+POST http://localhost:2001/u1/user
+Content-Type: application/json
+{
+    "name": "Imantha",
+    "company": "IIT",
+    "address": "Colombo",
+    "phone": "033-1234567",
+    "email": "ima@gmail.com",
+    "password": "12345"
+}
+
+# Sing in Endpoint
+POST http://localhost:2001/u1/user/login
+Content-Type: application/json
+{
+    "email": "ima@gmail.com",
+    "password": "12345"  
+}

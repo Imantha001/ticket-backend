@@ -7,7 +7,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const port = process.env.PORT || 2001;
 
-app.use(helmet());
+// app.use(helmet());
 app.use(cors());
 
 // MongoDB Connection Setup
