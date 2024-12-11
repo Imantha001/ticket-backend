@@ -2,11 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { route, post } = require("./ticketRouter");
 
-const { insertUser, getUserByEmail } = require("../model/users/user.model");
-const { hashPassword,comparePassword } = require("../helpers/bcrypt.helper");
+const {insertUser,getUserByEmail,getUserById,} = require("../model/users/user.model");const { hashPassword,comparePassword } = require("../helpers/bcrypt.helper");
 const { crateAccessJWT, crateRefreshJWT } = require("../helpers/jwt.helper");
-
-const { json } = require("body-parser");
+const {userAuthorization,} = require("../middleware/authorization.middleware");
 
 
 
@@ -14,6 +12,19 @@ router.all("/", (req, res, next) => {
   // res.json({ message: "from user router" });
   next();
 });
+
+
+
+// Get user profile router
+router.get("/", userAuthorization, async (req, res) => {
+  //this data coming form database
+  const _id = req.userId;
+  const userProf = await getUserById(_id);
+  //3. extract user id
+  //4. get user profile based on the user id
+  res.json({ user: userProf });
+});
+
 
 
 
@@ -66,9 +77,9 @@ router.post("/login", async (req, res) => {
     return res.json({ status: "error", message: "Invalid email or password!" });
   }
 
-  
-  const accessJWT = await crateAccessJWT(user.email);
-  const refreshJWT = await crateRefreshJWT(user.email);
+
+  const accessJWT = await crateAccessJWT(user.email, `${user._id}`);
+  const refreshJWT = await crateRefreshJWT(user.email, `${user._id}`);
   res.json({
     status: "success",message: "Login Successfully!", accessJWT, refreshJWT,
   });

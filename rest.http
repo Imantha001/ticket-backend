@@ -10,11 +10,16 @@ Content-Type: application/json
     "password": "12345"
 }
 
-# Sing in Endpoint
-
+### Sign in Endpoint
 POST http://localhost:2001/u1/user/login
 Content-Type: application/json
 {
     "email": "ima@gmail.com",
     "password": "12345"  
 }
+
+
+### Get a user profile endpoint
+
+GET  http://localhost:2001/u1/user
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiaW1hQGdtYWlsLmNvbSIsImlhdCI6MTczMzg4NjQzMywiZXhwIjoxNzM2NDc4NDMzfQ.K1Q32BAtiTjFpXnYfcn4ZcxOKg0X0W8Y5BAGxbXehf4

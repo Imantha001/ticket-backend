@@ -36,9 +36,13 @@ app.use(bodyParser.json());
 
 const userRouter = require("./src/routers/userRouter");
 const ticketRouter = require("./src/routers/ticketRouter");
+const tokensRouter = require("./src/routers/tokens.router");
+
 
 app.use("/u1/user", userRouter);
 app.use("/u1/ticket", ticketRouter);
+app.use("/u1/tokens", tokensRouter);
+
 
 const handleError = require("./src/Utills/errorHandling");
 app.use((req, res, next) => {
